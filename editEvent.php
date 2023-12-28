@@ -22,9 +22,17 @@ if (isset($_POST['delete']) && isset($_POST['id'])){
 	
 	$id = $_POST['id'];
 	$title = $_POST['title'];
+	$salle = $_POST['salle'];
+	$enseignant = $_POST['enseignant'];
 	$color = $_POST['color'];
+	$start = $_POST['start'];
+	$end = $_POST['end'];
+	if (strtotime($start) >= strtotime($end)) {
+		header('Location: index.php?error=Date fin doit etre apres date debut');
+		exit(); // Stop further execution
+	}
 	
-	$sql = "UPDATE events SET  title = '$title', color = '$color' WHERE id = $id ";
+	$sql = "UPDATE events SET  title = '$title', color = '$color',salle = '$salle', enseignant = '$enseignant', start = '$start', end = '$end' WHERE id = $id ";
 
 	
 	$query = $bdd->prepare( $sql );

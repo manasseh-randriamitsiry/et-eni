@@ -2,7 +2,7 @@
 require_once('bdd.php');
 
 
-$sql = "SELECT id, title, start, end, color FROM events ";
+$sql = "SELECT id, title, start, end, color,salle,enseignant FROM events ";
 
 $req = $bdd->prepare($sql);
 $req->execute();
@@ -22,7 +22,7 @@ $events = $req->fetchAll();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Bare - Start Bootstrap Template</title>
+    <title>Gestion d'emploie du temps</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -34,20 +34,17 @@ $events = $req->fetchAll();
     <!-- Custom CSS -->
     <style>
     body {
-        padding-top: 70px;
+        padding-top: 5%;
         /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
     }
 	#calendar {
-		max-width: 800px;
+		max-width: 90%;
 	}
 	.col-centered{
 		float: none;
 		margin: 0 auto;
 	}
     </style>
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -58,7 +55,7 @@ $events = $req->fetchAll();
 <body>
 
     <!-- Navigation -->
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -68,32 +65,39 @@ $events = $req->fetchAll();
                     <span class="ico-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Free Calendar</a>
+                <a class="navbar-brand" href="#">Emploie du temps</a>
             </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#">Menu</a>
-                    </li>
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
     </nav>
 
     <!-- Page Content -->
     <div class="container">
-
         <div class="row">
-            <div class="col-lg-12 text-center">
+            <div class="text-center">
+                <!-- Add this div for error message display -->
+                <div id="errorMessage" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Error</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p id="errorText"></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="calendar" class="col-centered">
+
                 </div>
             </div>
-			
         </div>
-        <!-- /.row -->
 		
 		<!-- Modal -->
 		<div class="modal fade" id="ModalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -103,30 +107,41 @@ $events = $req->fetchAll();
 			
 			  <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Add Event</h4>
+				<h4 class="modal-title" id="myModalLabel">Ajout evenement</h4>
 			  </div>
 			  <div class="modal-body">
-				
 				  <div class="form-group">
-					<label for="title" class="col-sm-2 control-label">Title</label>
+					<label for="title" class="col-sm-2 control-label">Titre</label>
 					<div class="col-sm-10">
-					  <input type="text" name="title" class="form-control" id="title" placeholder="Title">
+					  <input type="text" name="title" class="form-control" id="title" placeholder="Titre">
 					</div>
 				  </div>
+                  <div class="form-group">
+                      <label for="enseignant" class="col-sm-2 control-label">Enseignant:</label>
+                      <div class="col-sm-10">
+                          <input type="text" name="enseignant" class="form-control" id="enseignant" placeholder="Enseignant">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="salle" class="col-sm-2 control-label">Salle:</label>
+                      <div class="col-sm-10">
+                          <input type="text" name="salle" class="form-control" id="Salle" placeholder="Salle">
+                      </div>
+                  </div>
 				  <div class="form-group">
-					<label for="start" class="col-sm-2 control-label">Start date</label>
+					<label for="start" class="col-sm-2 control-label">Debut:</label>
 					<div class="col-sm-10">
 					  <input type="datetime-local" name="start" class="form-control" id="start" required>
 					</div>
 				  </div>
 				  <div class="form-group">
-					<label for="end" class="col-sm-2 control-label">End date</label>
+					<label for="end" class="col-sm-2 control-label">Fin:</label>
 					<div class="col-sm-10">
 					  <input type="datetime-local" name="end" class="form-control" id="end" required >
 					</div>
 				  </div>
                   <div class="form-group">
-                      <label for="color" class="col-sm-2 control-label">Color</label>
+                      <label for="color" class="col-sm-2 control-label">Couleur</label>
                       <div class="col-sm-10">
                           <input type="color" name="color" id="color"  class="form-control" style="border: none">
                       </div>
@@ -142,56 +157,58 @@ $events = $req->fetchAll();
 		  </div>
 		</div>
 		
-		
-		
 		<!-- Modal -->
 		<div class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		  <div class="modal-dialog" role="document">
 			<div class="modal-content">
-			<form class="form-horizontal" method="POST" action="editEventTitle.php">
+			<form class="form-horizontal" method="POST" action="editEvent.php">
 			  <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-				<h4 class="modal-title" id="myModalLabel">Edit Event</h4>
+				<h4 class="modal-title" id="myModalLabel">Mode editer</h4>
 			  </div>
 			  <div class="modal-body">
-				
 				  <div class="form-group">
-					<label for="title" class="col-sm-2 control-label">Title</label>
+					<label for="title" class="col-sm-2 control-label">Titre</label>
 					<div class="col-sm-10">
 					  <input type="text" name="title" class="form-control" id="title" placeholder="Title">
 					</div>
 				  </div>
+                  <div class="form-group">
+                      <label for="enseignant_edit" class="col-sm-2 control-label">Enseignant:</label>
+                      <div class="col-sm-10">
+                          <input type="text" name="enseignant" class="form-control" id="enseignant" placeholder="Enseignant">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="salle_edit" class="col-sm-2 control-label">Salle:</label>
+                      <div class="col-sm-10">
+                          <input type="text" name="salle" class="form-control" id="salle" placeholder="Salle">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="start" class="col-sm-2 control-label">Debut:</label>
+                      <div class="col-sm-10">
+                          <input type="datetime-local" name="start" class="form-control" id="start">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="end" class="col-sm-2 control-label">Fin:</label>
+                      <div class="col-sm-10">
+                          <input type="datetime-local" name="end" class="form-control" id="end">
+                      </div>
+                  </div>
 				  <div class="form-group">
-					<label for="color" class="col-sm-2 control-label">Color</label>
+					<label for="color" class="col-sm-2 control-label">Coleur</label>
 					<div class="col-sm-10">
-					  <select name="color" class="form-control" id="color">
-						  <option value="">Choose</option>
-						  <option style="color:#0071c5;" value="#0071c5">&#9724; Dark blue</option>
-						  <option style="color:#40E0D0;" value="#40E0D0">&#9724; Turquoise</option>
-						  <option style="color:#008000;" value="#008000">&#9724; Green</option>						  
-						  <option style="color:#FFD700;" value="#FFD700">&#9724; Yellow</option>
-						  <option style="color:#FF8C00;" value="#FF8C00">&#9724; Orange</option>
-						  <option style="color:#FF0000;" value="#FF0000">&#9724; Red</option>
-						  <option style="color:#000;" value="#000">&#9724; Black</option>
-						  
-						</select>
+                        <input type="color" name="color" id="color"  class="form-control" style="border: none">
 					</div>
 				  </div>
-				    <div class="form-group"> 
-						<div class="col-sm-offset-2 col-sm-10">
-						  <div class="checkbox">
-							<label class="text-danger"><input type="checkbox"  name="delete"> Delete event</label>
-						  </div>
-						</div>
-					</div>
-				  
+
 				  <input type="hidden" name="id" class="form-control" id="id">
-				
-				
 			  </div>
 			  <div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				<button type="submit" class="btn btn-primary">Save changes</button>
+				<button type="submit" class="btn btn-primary">Sauvegarder</button>
+                  <button type="submit" name="delete" class="btn btn-danger">Supprimer</button>
 			  </div>
 			</form>
 			</div>
@@ -202,57 +219,79 @@ $events = $req->fetchAll();
     <!-- /.container -->
 
     <!-- jQuery Version 1.11.1 -->
-    <script src="js/jquery.js"></script>
+    <script src="dist/js/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
 	
 	<!-- FullCalendar -->
-	<script src='js/moment.min.js'></script>
-	<script src='js/fullcalendar.min.js'></script>
-	
-	<script>
+	<script src='dist/js/moment.min.js'></script>
+	<script src='dist/js/fullcalendar.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js" integrity="sha256-GBryZPfVv8G3K1Lu2QwcqQXAO4Szv4xlY4B/ftvyoMI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js" integrity="sha256-FT1eN+60LmWX0J8P25UuTjEEE0ZYvpC07nnU6oFKFuI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/interaction/main.min.js" integrity="sha256-MUHmW5oHmLLsvmMWBO8gVtKYrjVwUSFau6pRXu8dtnA=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js" integrity="sha256-L9T+qE3Ms6Rsuxl+KwLST6a3R/2o6m33zB5mR2KyPjU=" crossorigin="anonymous"></script>
+
+
+    <script>
 
 	$(document).ready(function() {
-		
+
+        var errorMessage = "<?php echo isset($_GET['error']) ? $_GET['error'] : ''; ?>";
+
+        // If there is an error message, display it in the modal
+        if (errorMessage !== "") {
+            $('#errorText').text(errorMessage);
+            $('#errorMessage').modal('show');
+        }
+
 		$('#calendar').fullCalendar({
+            plugins: [ 'dayGrid',
+                'interaction',
+                'timeGrid'
+            ],
 			header: {
 				left: 'prev,next today',
 				center: 'title',
 				right: 'month,basicWeek,basicDay'
 			},
-
+            timeFormat: 'H(:mm)', // uppercase H for 24-hour clock
 			editable: true,
 			eventLimit: true, // allow "more" link when too many events
 			selectable: true,
 			selectHelper: true,
-			select: function(start, end) {
-				
-				$('#ModalAdd #start').val(moment(start).format('YYYY-MM-DD HH:mm:ss'));
-				$('#ModalAdd #end').val(moment(end).format('YYYY-MM-DD HH:mm:ss'));
-				$('#ModalAdd').modal('show');
-			},
-			eventRender: function(event, element) {
-				element.bind('dblclick', function() {
-					$('#ModalEdit #id').val(event.id);
-					$('#ModalEdit #title').val(event.title);
-					$('#ModalEdit #color').val(event.color);
-					$('#ModalEdit').modal('show');
-				});
-			},
+            AllDayDefault: false,
+            select: function(start, end) {
+                $('#ModalAdd #start').val(moment(start).format('YYYY-MM-DDTHH:mm:ss'));
+                $('#ModalAdd #end').val(moment(end).format('YYYY-MM-DDTHH:mm:ss'));
+                $('#ModalAdd').modal('show');
+            },
+            eventRender: function(event, element) {
+                element.bind('click', function() {
+                    $('#ModalEdit #id').val(event.id);
+                    $('#ModalEdit #title').val(event.title);
+                    $('#ModalEdit #salle').val(event.salle);
+                    $('#ModalEdit #enseignant').val(event.enseignant);
+                    $('#ModalEdit #color').val(event.color);
+                    var rgbaColor = hexToRGBA(event.color, 0.4);
+                    $('#ModalEdit .modal-content').css('background-color', rgbaColor);
+                    $('#ModalEdit #start').val(moment(event.start).format('YYYY-MM-DDTHH:mm:ss'));
+                    $('#ModalEdit #end').val(moment(event.end).format('YYYY-MM-DDTHH:mm:ss'));
+                    $('#ModalEdit').modal('show');
+                });
+                element.find('.fc-title').append("<br/> Prof: " + event.enseignant);
+                element.find('.fc-title').append("<br/> Salle: " + event.salle);
+            },
+
 			eventDrop: function(event, delta, revertFunc) { // si changement de position
-
 				edit(event);
-
 			},
 			eventResize: function(event,dayDelta,minuteDelta,revertFunc) { // si changement de longueur
-
 				edit(event);
-
 			},
 			events: [
-			<?php foreach($events as $event): 
-			
+			<?php foreach($events as $event):
+
 				$start = explode(" ", $event['start']);
 				$end = explode(" ", $event['end']);
 				if($start[1] == '00:00:00'){
@@ -269,14 +308,25 @@ $events = $req->fetchAll();
 				{
 					id: '<?php echo $event['id']; ?>',
 					title: '<?php echo $event['title']; ?>',
+					salle: '<?php echo $event['salle']; ?>',
+					enseignant: '<?php echo $event['enseignant']; ?>',
 					start: '<?php echo $start; ?>',
 					end: '<?php echo $end; ?>',
 					color: '<?php echo $event['color']; ?>',
 				},
+
 			<?php endforeach; ?>
 			]
 		});
-		
+
+        function hexToRGBA(hex, alpha) {
+            var r = parseInt(hex.slice(1, 3), 16),
+                g = parseInt(hex.slice(3, 5), 16),
+                b = parseInt(hex.slice(5, 7), 16);
+
+            return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+        }
+
 		function edit(event){
 			start = event.start.format('YYYY-MM-DD HH:mm:ss');
 			if(event.end){
@@ -284,14 +334,13 @@ $events = $req->fetchAll();
 			}else{
 				end = start;
 			}
-			
+
 			id =  event.id;
-			
 			Event = [];
 			Event[0] = id;
 			Event[1] = start;
 			Event[2] = end;
-			
+
 			$.ajax({
 			 url: 'editEventDate.php',
 			 type: "POST",
@@ -303,10 +352,12 @@ $events = $req->fetchAll();
 				}
 			});
 		}
-		
 	});
 
-</script>
+
+    </script>
+
+
 
 </body>
 

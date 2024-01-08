@@ -219,17 +219,21 @@ $events = $req->fetchAll();
     <!-- /.container -->
 
     <!-- jQuery Version 1.11.1 -->
-    <script src="js/jquery.js"></script>
+    <script src="dist/js/jquery.js"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="dist/js/bootstrap.min.js"></script>
 	
 	<!-- FullCalendar -->
-	<script src='js/moment.min.js'></script>
-	<script src='js/fullcalendar.min.js'></script>
-    <script src="js/jquery.longpress.js"></script>
-	
-	<script>
+	<script src='dist/js/moment.min.js'></script>
+	<script src='dist/js/fullcalendar.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/core/main.min.js" integrity="sha256-GBryZPfVv8G3K1Lu2QwcqQXAO4Szv4xlY4B/ftvyoMI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/daygrid/main.min.js" integrity="sha256-FT1eN+60LmWX0J8P25UuTjEEE0ZYvpC07nnU6oFKFuI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/interaction/main.min.js" integrity="sha256-MUHmW5oHmLLsvmMWBO8gVtKYrjVwUSFau6pRXu8dtnA=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/4.2.0/timegrid/main.min.js" integrity="sha256-L9T+qE3Ms6Rsuxl+KwLST6a3R/2o6m33zB5mR2KyPjU=" crossorigin="anonymous"></script>
+
+
+    <script>
 
 	$(document).ready(function() {
 
@@ -242,6 +246,10 @@ $events = $req->fetchAll();
         }
 
 		$('#calendar').fullCalendar({
+            plugins: [ 'dayGrid',
+                'interaction',
+                'timeGrid'
+            ],
 			header: {
 				left: 'prev,next today',
 				center: 'title',
@@ -251,6 +259,7 @@ $events = $req->fetchAll();
 			eventLimit: true, // allow "more" link when too many events
 			selectable: true,
 			selectHelper: true,
+            AllDayDefault: false,
             select: function(start, end) {
                 $('#ModalAdd #start').val(moment(start).format('YYYY-MM-DDTHH:mm:ss'));
                 $('#ModalAdd #end').val(moment(end).format('YYYY-MM-DDTHH:mm:ss'));
@@ -269,6 +278,8 @@ $events = $req->fetchAll();
                     $('#ModalEdit #end').val(moment(event.end).format('YYYY-MM-DDTHH:mm:ss'));
                     $('#ModalEdit').modal('show');
                 });
+                element.find('.fc-title').append("<br/> Prof: " + event.enseignant);
+                element.find('.fc-title').append("<br/> Salle: " + event.salle);
             },
 
 			eventDrop: function(event, delta, revertFunc) { // si changement de position
@@ -302,6 +313,7 @@ $events = $req->fetchAll();
 					end: '<?php echo $end; ?>',
 					color: '<?php echo $event['color']; ?>',
 				},
+
 			<?php endforeach; ?>
 			]
 		});

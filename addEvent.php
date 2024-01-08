@@ -8,6 +8,7 @@ if (isset($_POST['title']) && isset($_POST['start']) && isset($_POST['end']) && 
 	$title = $_POST['title'];
 	$salle = $_POST['salle'];
 	$enseignant = $_POST['enseignant'];
+	$niveau = $_POST['niveau'];
 	$start = $_POST['start'];
 
 	$end = $_POST['end'];
@@ -17,7 +18,7 @@ if (isset($_POST['title']) && isset($_POST['start']) && isset($_POST['end']) && 
 		exit(); // Stop further execution
 	}
 
-	$sql = "INSERT INTO events(title, start, end, color, enseignant, salle ) values ('$title', '$start', '$end', '$color', '$enseignant', '$salle')";
+	$sql = "INSERT INTO events(title, start, end, color, enseignant, salle,niveau ) values ('$title', '$start', '$end', '$color', '$enseignant', '$salle', '$niveau')";
 	//$req = $bdd->prepare($sql);
 	//$req->execute();
 	

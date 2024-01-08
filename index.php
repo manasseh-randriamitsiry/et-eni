@@ -2,7 +2,7 @@
 require_once('bdd.php');
 
 
-$sql = "SELECT id, title, start, end, color,salle,enseignant FROM events ";
+$sql = "SELECT id, title, start, end, color,salle,enseignant,niveau FROM events ";
 
 $req = $bdd->prepare($sql);
 $req->execute();
@@ -123,6 +123,12 @@ $events = $req->fetchAll();
                       </div>
                   </div>
                   <div class="form-group">
+                      <label for="niveau" class="col-sm-2 control-label">Niveau:</label>
+                      <div class="col-sm-10">
+                          <input type="text" name="niveau" class="form-control" id="enseignant" placeholder="Niveau">
+                      </div>
+                  </div>
+                  <div class="form-group">
                       <label for="salle" class="col-sm-2 control-label">Salle:</label>
                       <div class="col-sm-10">
                           <input type="text" name="salle" class="form-control" id="Salle" placeholder="Salle">
@@ -177,6 +183,12 @@ $events = $req->fetchAll();
                       <label for="enseignant_edit" class="col-sm-2 control-label">Enseignant:</label>
                       <div class="col-sm-10">
                           <input type="text" name="enseignant" class="form-control" id="enseignant" placeholder="Enseignant">
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label for="niveau" class="col-sm-2 control-label">Niveau:</label>
+                      <div class="col-sm-10">
+                          <input type="text" name="niveau" class="form-control" id="enseignant" placeholder="Niveau">
                       </div>
                   </div>
                   <div class="form-group">
@@ -262,6 +274,7 @@ $events = $req->fetchAll();
                     $('#ModalEdit #title').val(event.title);
                     $('#ModalEdit #salle').val(event.salle);
                     $('#ModalEdit #enseignant').val(event.enseignant);
+                    $('#ModalEdit #niveau').val(event.niveau);
                     $('#ModalEdit #color').val(event.color);
                     var rgbaColor = hexToRGBA(event.color, 0.4);
                     $('#ModalEdit .modal-content').css('background-color', rgbaColor);
@@ -271,6 +284,7 @@ $events = $req->fetchAll();
                 });
                 element.find('.fc-title').append("<br/> Prof: " + event.enseignant);
                 element.find('.fc-title').append("<br/> Salle: " + event.salle);
+                element.find('.fc-title').append("<br/> Niveau: " + event.niveau);
             },
 
 			eventDrop: function(event, delta, revertFunc) { // si changement de position
@@ -300,6 +314,7 @@ $events = $req->fetchAll();
 					title: '<?php echo $event['title']; ?>',
 					salle: '<?php echo $event['salle']; ?>',
 					enseignant: '<?php echo $event['enseignant']; ?>',
+					niveau: '<?php echo $event['niveau']; ?>',
 					start: '<?php echo $start; ?>',
 					end: '<?php echo $end; ?>',
 					color: '<?php echo $event['color']; ?>',

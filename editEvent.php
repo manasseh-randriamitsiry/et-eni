@@ -2,8 +2,6 @@
 
 require_once('bdd.php');
 if (isset($_POST['delete']) && isset($_POST['id'])){
-	
-	
 	$id = $_POST['id'];
 	
 	$sql = "DELETE FROM events WHERE id = $id";
@@ -19,7 +17,6 @@ if (isset($_POST['delete']) && isset($_POST['id'])){
 	}
 	
 }elseif (isset($_POST['title']) && isset($_POST['color']) && isset($_POST['id'])){
-	
 	$id = $_POST['id'];
 	$title = $_POST['title'];
 	$salle = $_POST['salle'];
@@ -34,7 +31,6 @@ if (isset($_POST['delete']) && isset($_POST['id'])){
 	
 	$sql = "UPDATE events SET  title = '$title', color = '$color',salle = '$salle', enseignant = '$enseignant', start = '$start', end = '$end' WHERE id = $id ";
 
-	
 	$query = $bdd->prepare( $sql );
 	if ($query == false) {
 	 print_r($bdd->errorInfo());

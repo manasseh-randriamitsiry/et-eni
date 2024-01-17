@@ -81,10 +81,10 @@ $events = $req->fetchAll();
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="myModalLabel">Error</h4>
+                                <h4 class="modal-title" id="myModalLabel">Message</h4>
                             </div>
                             <div class="modal-body">
-                                <p id="errorText"></p>
+                                <h3 id="errorText"></h3>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -188,7 +188,7 @@ $events = $req->fetchAll();
                   <div class="form-group">
                       <label for="niveau" class="col-sm-2 control-label">Niveau:</label>
                       <div class="col-sm-10">
-                          <input type="text" name="niveau" class="form-control" id="enseignant" placeholder="Niveau">
+                          <input type="text" name="niveau" class="form-control" id="niveau" placeholder="Niveau">
                       </div>
                   </div>
                   <div class="form-group">
@@ -245,7 +245,12 @@ $events = $req->fetchAll();
 
 	$(document).ready(function() {
 
-        var errorMessage = "<?php echo isset($_GET['error']) ? $_GET['error'] : ''; ?>";
+        var errorMessage = "<?php echo isset($_GET['message']) ? $_GET['message'] : ''; ?>";
+        if (errorMessage.includes("erreur")){
+            $('#errorMessage').css('color','red');
+        } else if (errorMessage.includes("success")){
+            $('#errorText').css('color','green');
+        }
 
         // If there is an error message, display it in the modal
         if (errorMessage !== "") {
@@ -345,17 +350,22 @@ $events = $req->fetchAll();
 			Event[1] = start;
 			Event[2] = end;
 
-			$.ajax({
-			 url: 'editEventDate.php',
-			 type: "POST",
-			 data: {Event:Event},
-			 success: function(rep) {
-					if(rep != 'OK'){
-                        alert('Could not be saved. try again.');
+            $.ajax({
+                url: 'editEventDate.php',
+                type: "POST",
+                data: { Event: Event },
+                success: function (rep) {
+                    if (rep != 'OK') {
+                        alert("Non sauvegarder au base des données, merci de l'editer verifier la salle et date.");
+                        location.reload(); // Actualiser la page en cas d'échec
                     }
-				}
-			});
-		}
+                },
+                error: function () {
+                    alert("Erreur lors de la requête AJAX");
+                    location.reload(); // Actualiser la page en cas d'erreur
+                }
+            });
+        }
 	});
 
 
